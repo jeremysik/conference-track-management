@@ -1,0 +1,9 @@
+/node_modules/
+/dist/
+/npm-debug.log
+/src/main.js
+/src/main.js.map
+/src/app/**/*.js
+/src/**/*.js.map
+/src/**/*.spec.js
+/src/**/*.spec.js.map
