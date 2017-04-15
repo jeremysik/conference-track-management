@@ -30,7 +30,14 @@ export class ConferenceSchedulerService {
 
 		// Assumptions: 
 		// 1. There is no minimum talk time, maximum talk time is 4 hours, unit of time is 1 minute
-		// 2. A session can have no talks in it, i.e. There could be an afternoon session with no morning session
+		// 2. The morning session can finish any time before lunch (12:00)
+		// 3. The afternoon session can finish any time before the networking event (16:00-17:00 start)
+
+		// Despite the rule 'The conference has multiple tracks each of which has a morning and afternoon session.',
+		// I have made the assumption:
+		// 4. A session can have no talks in it, i.e. There could be an afternoon session with no morning session
+		// ...because if there is between 1 and 1.5 tracks of talks it doesn't make sense to put a single talk in a
+		// session by itself if it can fit into the other session on that day.
 
 		let tracks:Track[] = [new Track()];
 
