@@ -2,14 +2,68 @@
  	Conference Track Management
 </h1>
 
-<h3>
+<h2>
 	Enter Input Here:
-</h3>
+</h2>
 <div fxLayout="column">
 	<textarea [(ngModel)]="inputString" rows="25"></textarea>
 	<button md-button (click)="compute();">Go</button>
 </div>
 
-<h3>
+<h2>
 	Output:
-</h3>
+</h2>
+<div *ngFor="let track of tracks; let i = index;">
+	<h3>Track {{ i }}</h3>
+	<h4>Morning Session</h4>
+	<table>
+		<tr>
+			<th style="width: 70px">
+				Time
+			</th>
+			<th>
+				Talk
+			</th>
+			<th>
+				Length
+			</th>
+		</tr>
+		<tr *ngFor="let talk of track.morningSession.talks">
+			<td>
+				{{ talk.startTime.format('HH:mm:ss') }}
+			</td>
+			<td>
+				{{ talk.name }}
+			</td>
+			<td>
+				{{ talk.minutes }} min
+			</td>
+		</tr>
+	</table>
+
+	<h4>Afternoon Session</h4>
+	<table>
+		<tr>
+			<th style="width: 70px">
+				Time
+			</th>
+			<th>
+				Talk
+			</th>
+			<th>
+				Length
+			</th>
+		</tr>
+		<tr *ngFor="let talk of track.afternoonSession.talks">
+			<td>
+				{{ talk.startTime.format('HH:mm:ss') }}
+			</td>
+			<td>
+				{{ talk.name }}
+			</td>
+			<td>
+				{{ talk.minutes }} min
+			</td>
+		</tr>
+	</table>
+</div>

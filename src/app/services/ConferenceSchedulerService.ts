@@ -1,21 +1,13 @@
 import * as _ from "lodash";
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
+import * as moment from 'moment/moment';
 
-class Talk {
-	public name:string;
-	public minutes:number;
-
-	constructor(name:string, minutes:number) {
-		this.name = name;
-		this.minutes = minutes;
-	}
-}
+import { Session } from '../models/SessionModel';
+import { Talk } from '../models/TalkModel';
+import { Track } from '../models/TrackModel';
 
 @Injectable()
 export class ConferenceSchedulerService {
-
-	private readonly morningSessionMaxLength:number = 180;
-	private readonly afternoonSessionMaxLength:number = 240;
 
 	private parseInput(rawInput:string):Talk[] {
 		return _.map(_.split(rawInput, '\n'), (rawLine:string) => this.parseLine(rawLine));
@@ -33,14 +25,45 @@ export class ConferenceSchedulerService {
 		return new Talk(talkName, talkTimeMinutes);
 	}
 
-	public schedule(rawInput:string):void {
-		let input:Talk[] = _.orderBy(this.parseInput(rawInput), ['minutes'], ['desc']);
+	public schedule(rawInput:string):Track[] {
+		let talks:Talk[] = _.orderBy(this.parseInput(rawInput), ['minutes'], ['desc']);
 
 		// Assumptions: 
 		// 1. There is no minimum talk time, maximum talk time is 4 hours, unit of time is 1 minute
 		// 2. A session can have no talks in it, i.e. There could be an afternoon session with no morning session
 
-		console.log(input);
+		let tracks:Track[] = [new Track()];
+
+		_.forEach(talks, (talk:Talk) => {
+			let talkPlaced:boolean = false;
+
+			_.forEach(tracks, (track:Track) => {
+				if(talkPlaced) {
+					return false; // Break out of forEach
+				}
+				else if(track.afternoonSession.freeMinutes() >= talk.minutes) {
+					track.afternoonSession.addTalk(talk);
+					talkPlaced = true;
+				}
+				else if(track.morningSession.freeMinutes() >= talk.minutes) {
+					track.morningSession.addTalk(talk);
+					talkPlaced = true;
+				}
+			});
+
+			if(!talkPlaced) {
+				let newTrack:Track = new Track();
+				newTrack.afternoonSession.addTalk(talk);
+				tracks.push(newTrack);
+			}
+		});
+
+		// Place all Networking Events
+		_.forEach(tracks, (track:Track) => {
+			track.afternoonSession.addNetworkingEvent();
+		});
+
+		return tracks;
 	}
 
 }

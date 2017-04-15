@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { ConferenceSchedulerService } from './services/ConferenceSchedulerService';
+import { Track } from './models/TrackModel';
+import * as _ from "lodash";
 
 @Component({
   selector: 'app',
@@ -27,14 +29,15 @@ Ruby on Rails Legacy App Maintenance 60min
 A World Without HackerNews 30min
 User Interface CSS in Rails Apps 30min`;
 
+	public tracks:Track[] = null;
+
 	constructor(
 		private conferenceSchedulerService:ConferenceSchedulerService
 	) {
 	}
 
 	public compute():void {
-		console.log('Computing...');
-		this.conferenceSchedulerService.schedule(this.inputString);
+		this.tracks = this.conferenceSchedulerService.schedule(this.inputString);
 	}
 
 }
