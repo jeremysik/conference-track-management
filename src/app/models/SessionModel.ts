@@ -40,11 +40,15 @@ export class Session {
 	}
 
 	public addNetworkingEvent():boolean {
-		let networkingEvent:Talk = new Talk('Networking Event', 60);
+		let networkingEvent:Talk = new Talk('Networking Event', 60),
+			lastTalk = _.last(this.talks);
+
 		networkingEvent.startTime = moment().set({'hour':16, 'minute':0, 'second':0});
-		if(this._talks.length > 0) {
-			networkingEvent.startTime = _.last(this._talks).startTime.clone().add(_.last(this._talks).minutes, 'minutes');
+
+		if(lastTalk && lastTalk.startTime.clone().add(lastTalk.minutes, 'minutes').isAfter(moment().set({'hour':15, 'minute':59, 'second':59}))) {
+			networkingEvent.startTime = lastTalk.startTime.clone().add(lastTalk.minutes, 'minutes');
 		}
+
 		this._talks.push(networkingEvent);
 		return true;
 	}

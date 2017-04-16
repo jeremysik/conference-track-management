@@ -1,7 +1,7 @@
 import * as moment from 'moment/moment';
 import { Session } from './SessionModel';
 
-const MORNING_SESSION_MAX_LENGTH:number = 180;
+export const MORNING_SESSION_MAX_LENGTH:number = 180;
 export const AFTERNOON_SESSION_MAX_LENGTH:number = 240; // Assume that this will always be longer than morning session length
 
 export class Track {

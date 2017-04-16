@@ -50,6 +50,9 @@ module.exports = function(config) {
       // Lodash
       'node_modules/lodash/lodash.js',
 
+      // Moment
+      'node_modules/moment/moment.js',
+
       // RxJs
       { pattern: 'node_modules/rxjs/**/*.js', included: false, watched: false },
       { pattern: 'node_modules/rxjs/**/*.js.map', included: false, watched: false },
